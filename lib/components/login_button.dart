@@ -1,23 +1,34 @@
 import 'package:flutter/material.dart';
 
-class LoginButton extends StatelessWidget {
-  Function()? onTap;
+class LoginButton extends StatefulWidget {
+  final VoidCallback onTap;
 
-  LoginButton({super.key, required this.onTap});
+  const LoginButton({super.key, required this.onTap});
+
+  @override
+  _LoginButtonState createState() => _LoginButtonState();
+}
+
+class _LoginButtonState extends State<LoginButton> {
+  bool _isPressed = false;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: onTap,
+      onTapDown: (_) => _setPressed(true),
+      onTapUp: (_) {
+        _setPressed(false);
+        widget.onTap(); // Call the onTap callback
+      },
+      onTapCancel: () => _setPressed(false),
       child: Container(
         padding: EdgeInsets.all(25),
         margin: EdgeInsets.symmetric(horizontal: 25),
         decoration: BoxDecoration(
-          //color: Color(0xffb2ff9e),
-          color: Colors.black,
+          color: _isPressed ? Colors.grey[800] : Colors.black,
           borderRadius: BorderRadius.circular(8),
         ),
-        child: const Center(
+        child: Center(
           child: Text(
             "Sign In",
             style: TextStyle(
@@ -29,5 +40,11 @@ class LoginButton extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _setPressed(bool isPressed) {
+    setState(() {
+      _isPressed = isPressed;
+    });
   }
 }
