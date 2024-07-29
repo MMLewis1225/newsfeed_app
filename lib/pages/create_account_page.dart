@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../components/login_field.dart';
@@ -33,11 +34,22 @@ class CreateAccountPageState extends State<CreateAccountPage> {
       errorMessage("Passwords do not match");
     } else {
       try {
-        //check if password matches confirm password
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        //check if password matches confirm password, if so create user
+        UserCredential userCredential =
+            await FirebaseAuth.instance.createUserWithEmailAndPassword(
           email: emailController.text,
           password: passwordController.text,
         );
+
+        ///after creating the user, create a new document in cloud firestore called users
+        FirebaseFirestore.instance
+            .collection("Users")
+            .doc(userCredential.user!.email!)
+            .set({
+          'username': emailController.text.split("@")[0], //initial Username
+          'bio': 'Empty bio..'
+          //additional fields go here
+        });
 
         // Pop loading circle and navigate
         Navigator.pop(context);

@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../components/login_field.dart';
 import '../components/news_post.dart';
+import '../components/drawer.dart';
+import 'profile_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -18,6 +20,34 @@ class _HomePageState extends State<HomePage> {
   // Sign out
   void signUserOut() {
     FirebaseAuth.instance.signOut();
+  }
+
+//go to profile page
+  void goToProfilePage() {
+    //pop menu drawer
+    Navigator.pop(context);
+
+    //go to profile page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ProfilePage(),
+      ),
+    );
+  }
+
+//go to write article page
+  void onWriteArticleTap() {
+    //pop menu drawer
+    Navigator.pop(context);
+
+    //go to profile page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ProfilePage(),
+      ),
+    );
   }
 
   void postMessage() {
@@ -50,6 +80,11 @@ class _HomePageState extends State<HomePage> {
             icon: Icon(Icons.logout),
           ),
         ],
+      ),
+      drawer: MyDrawer(
+        onProfileTap: goToProfilePage,
+        onSignOut: signUserOut,
+        onWriteArticleTap: onWriteArticleTap,
       ),
       body: Center(
         child: Column(
