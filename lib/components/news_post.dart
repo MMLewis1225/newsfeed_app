@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../components/like_button.dart';
@@ -37,6 +38,22 @@ class _NewsPostState extends State<NewsPost> {
     setState(() {
       isLiked = !isLiked;
     });
+
+    //access the document in firebase
+    DocumentReference postRef =
+        FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
+
+    if (isLiked) {
+      //if post is liked, add the user's email to the likes list
+      postRef.update({
+        'Likes': FieldValue.arrayUnion([currentUser.email])
+      });
+    } else {
+      //if post is unliked, remove the user from likes list
+      postRef.update({
+        'Likes': FieldValue.arrayRemove([currentUser.email])
+      });
+    }
   }
 
   @override
@@ -63,8 +80,33 @@ class _NewsPostState extends State<NewsPost> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(widget.time),
-              LikeButton(isLiked: isLiked, onTap: toggleLike)
-              // Icon(Icons.thumb_up, color: Colors.grey, size: 20),
+              //wrap together
+
+              Row(
+                children: [
+                  LikeButton(isLiked: isLiked, onTap: toggleLike),
+                  // Icon(Icons.thumb_up, color: Colors.grey, size: 20),
+                  const SizedBox(
+                      width:
+                          5), // Add some space between the icon and the count
+
+                  Text(widget.likes.length.toString(),
+                      style: const TextStyle(
+                        fontSize: 20,
+                      )),
+
+                  /*
+                  Text(
+            widget.text, // Use the text parameter
+            style: const TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+          ),
+                  */
+                ],
+              ),
             ],
           ),
         ],

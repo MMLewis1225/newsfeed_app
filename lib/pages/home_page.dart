@@ -34,7 +34,7 @@ class _HomePageState extends State<HomePage> {
 
   String formatTimestamp(Timestamp timestamp) {
     var date = timestamp.toDate();
-    return "${date.day}/${date.month}/${date.year}, ${date.hour}:${date.minute}";
+    return "${date.month}/${date.day}/${date.year}, ${date.hour}:${date.minute}";
   }
 
   @override
