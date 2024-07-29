@@ -1,9 +1,11 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import '../components/login_field.dart';
 import '../components/news_post.dart';
-import 'write_article_page.dart';
+import '../components/drawer.dart';
+import 'profile_page.dart';
+import 'write_article_page.dart'
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -19,6 +21,32 @@ class _HomePageState extends State<HomePage> {
   // Sign out
   void signUserOut() {
     FirebaseAuth.instance.signOut();
+  }
+
+//go to profile page
+  void goToProfilePage() {
+    //pop menu drawer
+    Navigator.pop(context);
+    //go to profile page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ProfilePage(),
+      ),
+    );
+  }
+
+//go to write article page
+  void onWriteArticleTap() {
+    //pop menu drawer
+    Navigator.pop(context);
+    //go to profile page
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const ProfilePage(),
+      ),
+    );
   }
 
   void postMessage() {
@@ -52,6 +80,11 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      drawer: MyDrawer(
+        onProfileTap: goToProfilePage,
+        onSignOut: signUserOut,
+        onWriteArticleTap: onWriteArticleTap,
+      ),
       body: Center(
         child: Column(
           children: [
@@ -60,7 +93,7 @@ class _HomePageState extends State<HomePage> {
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("User Posts")
-                    .orderBy("TimeStamp", descending: false)
+                    .orderBy("TimeStamp", descending: true) //new posts first
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -71,7 +104,8 @@ class _HomePageState extends State<HomePage> {
                         final timestamp = post['TimeStamp'] as Timestamp;
                         return NewsPost(
                           message: post['Message'],
-                          user: post['UserEmail'],
+                          userEmail:
+                              post['UserEmail'], //user: post['UserEmail'],
                           time: formatTimestamp(timestamp),
                           postId: post.id,
                           likes: List<String>.from(post['Likes'] ?? []),

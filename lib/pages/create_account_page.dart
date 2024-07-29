@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import '../components/login_field.dart';
@@ -17,6 +18,8 @@ class CreateAccountPageState extends State<CreateAccountPage> {
   final emailController = TextEditingController();
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
+  final usernameController = TextEditingController(); // Username controller
+
   void signUserUp() async {
     //sign user up method
     showDialog(
@@ -28,28 +31,62 @@ class CreateAccountPageState extends State<CreateAccountPage> {
       },
     );
 
+    //check if password matches confirm password
     if (passwordController.text != confirmPasswordController.text) {
       Navigator.pop(context);
       errorMessage("Passwords do not match");
     } else {
       try {
-        //check if password matches confirm password
-        await FirebaseAuth.instance.createUserWithEmailAndPassword(
-          email: emailController.text,
-          password: passwordController.text,
-        );
+        //check if username is unique
+        final querySnapshot = await FirebaseFirestore.instance
+            .collection('Users')
+            .where('username', isEqualTo: usernameController.text)
+            .get();
 
-        // Pop loading circle and navigate
-        Navigator.pop(context);
+        if (querySnapshot.docs.isNotEmpty) {
+          Navigator.pop(context);
+          errorMessage("Username already taken");
+        } else {
+          // Create user account
+          UserCredential userCredential =
+              await FirebaseAuth.instance.createUserWithEmailAndPassword(
+            email: emailController.text,
+            password: passwordController.text,
+          );
+          Navigator.pop(context);
+          //after creating the user, create a new document in cloud firestore called users
+          // Add user to Firestore with the provided username
+          await FirebaseFirestore.instance
+              .collection("Users")
+              .doc(userCredential.user!.email!)
+              .set({
+            'username': usernameController.text,
+            // 'username': emailController.text.split("@")[0], //initial Username
+            'bio': 'Empty bio..'
+            //additional fields go here
+          });
+
+          // Pop loading circle and navigate
+          // Navigator.pop(context);
+        }
       } on FirebaseAuthException catch (e) {
         // Ensure loading dialog is dismissed
         Navigator.pop(context);
-        errorMessage(e.code);
+        //errorMessage(e.code);
+        errorMessage(e.message ?? "Error");
       }
     }
   }
 
   void errorMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Center(child: Text(message)),
+      ),
+    );
+  }
+  /*void errorMessage(String message) {
     showDialog(
       context: context,
       builder: (context) {
@@ -63,7 +100,7 @@ class CreateAccountPageState extends State<CreateAccountPage> {
         );
       },
     );
-  }
+  }*/
 
   @override
   Widget build(BuildContext context) {
@@ -129,6 +166,15 @@ class CreateAccountPageState extends State<CreateAccountPage> {
                   controller: confirmPasswordController,
                   hintText: 'Confirm Password',
                   obscureText: true,
+                ),
+
+                const SizedBox(height: 10),
+
+                // Username field
+                MyLoginField(
+                  controller: usernameController,
+                  hintText: 'Username',
+                  obscureText: false,
                 ),
 
                 const SizedBox(height: 25),
