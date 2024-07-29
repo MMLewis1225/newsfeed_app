@@ -1,8 +1,9 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import '../components/login_field.dart';
 import '../components/news_post.dart';
+import 'write_article_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -115,6 +116,12 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(height: 50),
           ],
         ),
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.pushNamed(context, '/writeArticle');
+        },
+        child: Icon(Icons.add),
       ),
     );
   }
