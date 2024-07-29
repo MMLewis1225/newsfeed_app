@@ -26,7 +26,6 @@ class _HomePageState extends State<HomePage> {
   void goToProfilePage() {
     //pop menu drawer
     Navigator.pop(context);
-
     //go to profile page
     Navigator.push(
       context,
@@ -40,7 +39,6 @@ class _HomePageState extends State<HomePage> {
   void onWriteArticleTap() {
     //pop menu drawer
     Navigator.pop(context);
-
     //go to profile page
     Navigator.push(
       context,
@@ -94,7 +92,7 @@ class _HomePageState extends State<HomePage> {
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("User Posts")
-                    .orderBy("TimeStamp", descending: false)
+                    .orderBy("TimeStamp", descending: true) //new posts first
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -105,7 +103,8 @@ class _HomePageState extends State<HomePage> {
                         final timestamp = post['TimeStamp'] as Timestamp;
                         return NewsPost(
                           message: post['Message'],
-                          user: post['UserEmail'],
+                          userEmail:
+                              post['UserEmail'], //user: post['UserEmail'],
                           time: formatTimestamp(timestamp),
                           postId: post.id,
                           likes: List<String>.from(post['Likes'] ?? []),

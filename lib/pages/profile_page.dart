@@ -22,46 +22,70 @@ class _ProfilePageState extends State<ProfilePage> {
     await showDialog(
       context: context,
       builder: (context) => AlertDialog(
-          backgroundColor: Colors.grey[900],
-          title: Text(
-            "Edit $field",
-            style: const TextStyle(color: Colors.white),
+        backgroundColor: Colors.grey[900],
+        title: Text(
+          "Edit $field",
+          style: const TextStyle(color: Colors.white),
+        ),
+        content: TextField(
+          autofocus: true,
+          style: TextStyle(color: Colors.white),
+          decoration: InputDecoration(
+            hintText: "Enter new $field",
+            hintStyle: TextStyle(color: Colors.grey),
           ),
-          content: TextField(
-            autofocus: true,
-            style: TextStyle(color: Colors.white),
-            decoration: InputDecoration(
-              hintText: "Enter new $field",
-              hintStyle: TextStyle(color: Colors.grey),
+          onChanged: (value) {
+            newValue = value;
+          },
+        ),
+        actions: [
+          //cancel button
+          TextButton(
+            child: Text(
+              'Cancel',
+              style: TextStyle(color: Colors.white),
             ),
-            onChanged: (value) {
-              newValue = value;
-            },
+            onPressed: () => Navigator.pop(context),
           ),
-          actions: [
-            //cancel button
-            TextButton(
-              child: Text(
-                'Cancel',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () => Navigator.pop(context),
+          //save
+          TextButton(
+            child: Text(
+              'Save',
+              style: TextStyle(color: Colors.white),
             ),
-            //save
-            TextButton(
-              child: Text(
-                'Save',
-                style: TextStyle(color: Colors.white),
-              ),
-              onPressed: () => Navigator.of(context).pop(newValue),
-            ),
-          ]),
+            onPressed: () => Navigator.of(context).pop(newValue),
+          ),
+        ],
+      ),
     );
-    //update firestore
-    if (newValue.trim().length > 0) {
-      //only update when somethings there-- (and its unique)
-      await usersCollection.doc(currentUser.email).update({field: newValue});
+
+    if (newValue.trim().isNotEmpty) {
+      // Check if the new username is unique
+      if (field == 'username') {
+        final querySnapshot =
+            await usersCollection.where('username', isEqualTo: newValue).get();
+
+        if (querySnapshot.docs.isNotEmpty) {
+          errorMessage("Username already taken");
+          return;
+        }
+      }
+
+      //update firestore
+      if (newValue.trim().length > 0) {
+        //only update when somethings there-- (and its unique)
+        await usersCollection.doc(currentUser.email).update({field: newValue});
+      }
     }
+  }
+
+  void errorMessage(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Center(child: Text(message)),
+      ),
+    );
   }
 
   @override
