@@ -41,7 +41,7 @@ class _ProfilePageState extends State<ProfilePage> {
         actions: [
           //cancel button
           TextButton(
-            child: Text(
+            child: const Text(
               'Cancel',
               style: TextStyle(color: Colors.white),
             ),
@@ -49,7 +49,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           //save
           TextButton(
-            child: Text(
+            child: const Text(
               'Save',
               style: TextStyle(color: Colors.white),
             ),
@@ -72,7 +72,7 @@ class _ProfilePageState extends State<ProfilePage> {
       }
 
       //update firestore
-      if (newValue.trim().length > 0) {
+      if (newValue.trim().isNotEmpty) {
         //only update when somethings there-- (and its unique)
         await usersCollection.doc(currentUser.email).update({field: newValue});
       }

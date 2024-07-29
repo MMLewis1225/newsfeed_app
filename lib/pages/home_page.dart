@@ -23,11 +23,11 @@ class _HomePageState extends State<HomePage> {
     FirebaseAuth.instance.signOut();
   }
 
-//go to profile page
+  // Go to profile page
   void goToProfilePage() {
-    //pop menu drawer
+    // Pop menu drawer
     Navigator.pop(context);
-    //go to profile page
+    // Go to profile page
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -36,11 +36,11 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-//go to write article page
+  // Go to write article page
   void onWriteArticleTap() {
-    //pop menu drawer
+    // Pop menu drawer
     Navigator.pop(context);
-    //go to write article page
+    // Go to write article page
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -93,7 +93,7 @@ class _HomePageState extends State<HomePage> {
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection("User Posts")
-                    .orderBy("TimeStamp", descending: true) //new posts first
+                    .orderBy("TimeStamp", descending: true) // New posts first
                     .snapshots(),
                 builder: (context, snapshot) {
                   if (snapshot.hasData) {
@@ -105,11 +105,12 @@ class _HomePageState extends State<HomePage> {
                         return NewsPost(
                           title: post['Title'],
                           message: post['Message'],
-                          userEmail:
-                              post['UserEmail'], //user: post['UserEmail'],
+                          userEmail: post['UserEmail'],
                           time: formatTimestamp(timestamp),
                           postId: post.id,
                           likes: List<String>.from(post['Likes'] ?? []),
+                          category:
+                              post['Category'] ?? 'N/A', // Display the category
                         );
                       },
                     );
@@ -133,7 +134,7 @@ class _HomePageState extends State<HomePage> {
                   Expanded(
                     child: MyLoginField(
                       controller: textController,
-                      hintText: "Write your article here..",
+                      hintText: "Write your article here...",
                       obscureText: false,
                     ),
                   ),

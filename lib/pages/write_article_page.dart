@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import '../components/category_button.dart'; // Import the category button component
 
 class WriteArticlePage extends StatefulWidget {
   @override
@@ -12,6 +13,16 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
   final titleController = TextEditingController();
   final textController = TextEditingController();
   String username = '';
+  String selectedCategory = 'N/A';
+
+  final categories = [
+    'Entertainment',
+    'Health & Lifestyle',
+    'Science',
+    'Sports',
+    'Politics',
+    'Other',
+  ];
 
   @override
   void initState() {
@@ -22,7 +33,7 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
   void fetchUsername() async {
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
         .collection('Users')
-        .doc(currentUser.email) // Assuming email is used as the document ID
+        .doc(currentUser.email)
         .get();
     setState(() {
       username = userDoc['username'];
@@ -32,17 +43,115 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
   void postArticle() {
     if (titleController.text.length >= 7 &&
         titleController.text.length <= 100 &&
-        textController.text.isNotEmpty) {
+        textController.text.isNotEmpty &&
+        selectedCategory != 'N/A') {
       FirebaseFirestore.instance.collection("User Posts").add({
         'UserEmail': currentUser.email,
-        'UserName': username, // Include the username in the post
+        'UserName': username,
         'Title': titleController.text,
         'Message': textController.text,
+        'Category': selectedCategory,
         'TimeStamp': Timestamp.now(),
         'Likes': [],
-        //   'Views': [],
       });
-      Navigator.pop(context); // Go back to the previous page after posting
+      Navigator.pop(context);
+    }
+  }
+
+  void showCategorySelectionDialog() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        String tempCategory = selectedCategory;
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              shape: RoundedRectangleBorder(
+                borderRadius:
+                    BorderRadius.circular(12), // Smaller border radius
+              ),
+              title: Text("Select Category"),
+              content: SingleChildScrollView(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Wrap(
+                      spacing: 8.0,
+                      children: categories.map((category) {
+                        return CategoryButton(
+                          text: category,
+                          isSelected: tempCategory == category,
+                          onPressed: () {
+                            setState(() {
+                              tempCategory = category;
+                            });
+                          },
+                        );
+                      }).toList(),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                ElevatedButton(
+                  onPressed: tempCategory != 'N/A'
+                      ? () {
+                          setState(() {
+                            selectedCategory = tempCategory;
+                          });
+                          Navigator.of(context).pop(); // Close the dialog
+                          postArticle(); // Post the article
+                        }
+                      : null,
+                  child: Text("Publish Article"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text("Cancel"),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  void showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12), // Smaller border radius
+          ),
+          title: Text("Error"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void handleContinueButton() {
+    String title = titleController.text.trim();
+    String article = textController.text.trim();
+
+    if (title.length < 7) {
+      showErrorDialog("Title must be at least 7 characters long.");
+    } else if (article.isEmpty) {
+      showErrorDialog("Article cannot be empty.");
+    } else {
+      showCategorySelectionDialog();
     }
   }
 
@@ -51,14 +160,24 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text("Write Article"),
+        backgroundColor: Colors.blue,
         actions: [
-          IconButton(
-            onPressed: postArticle,
-            icon: Icon(Icons.save),
+          ElevatedButton(
+            onPressed: handleContinueButton,
+            style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.black,
+              backgroundColor: Colors.blue,
+              side: BorderSide(color: Colors.black), // Black outline
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8), // Smaller border radius
+              ),
+            ),
+            child: Text("Continue"),
           ),
+          const SizedBox(width: 16),
         ],
       ),
-      body: Padding(
+      body: SingleChildScrollView(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -66,26 +185,47 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
             TextField(
               controller: titleController,
               decoration: InputDecoration(
-                labelText: 'Title (min 7 letters, max 100)',
-                border: OutlineInputBorder(),
+                labelText: 'Title',
+                focusedBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue, width: 2),
+                ),
+                enabledBorder: UnderlineInputBorder(
+                  borderSide: BorderSide(color: Colors.blue, width: 1),
+                ),
               ),
               maxLength: 100,
-            ),
-            const SizedBox(height: 8),
-            //Text("By ${currentUser.email}"),
-            Text("By $username"),
-            const SizedBox(height: 16),
-            Expanded(
-              child: TextField(
-                controller: textController,
-                decoration: InputDecoration(
-                  hintText: 'Write your article here...',
-                  border: OutlineInputBorder(),
-                  alignLabelWithHint: true, // Align hint with the top-left
-                ),
-                maxLines: null,
-                expands: true,
+              maxLines: null,
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
               ),
+            ),
+            const SizedBox(height: 16),
+            Text(
+              "By $username",
+              style: const TextStyle(
+                fontStyle: FontStyle.italic,
+                fontSize: 14,
+                color: Colors.grey,
+              ),
+            ),
+            const SizedBox(height: 16),
+            // Custom divider with increased thickness
+            Container(
+              height: 2, // Thicker divider
+              color: Colors.black,
+            ),
+            const SizedBox(height: 16),
+            TextField(
+              controller: textController,
+              decoration: const InputDecoration(
+                hintText: 'Write your article here...',
+                contentPadding: EdgeInsets.all(16),
+                border: InputBorder.none, // Remove border
+              ),
+              maxLines: null,
+              minLines: 10,
+              expands: false,
             ),
           ],
         ),
