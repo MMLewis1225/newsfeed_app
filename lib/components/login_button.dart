@@ -2,8 +2,9 @@ import 'package:flutter/material.dart';
 
 class LoginButton extends StatefulWidget {
   final VoidCallback onTap;
+  final String text;
 
-  const LoginButton({super.key, required this.onTap});
+  const LoginButton({super.key, required this.onTap, required this.text});
 
   @override
   _LoginButtonState createState() => _LoginButtonState();
@@ -30,8 +31,8 @@ class _LoginButtonState extends State<LoginButton> {
         ),
         child: Center(
           child: Text(
-            "Sign In",
-            style: TextStyle(
+            widget.text, // Use the text parameter
+            style: const TextStyle(
               color: Colors.white,
               fontWeight: FontWeight.bold,
               fontSize: 16,
