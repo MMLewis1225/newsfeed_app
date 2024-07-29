@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../components/like_button.dart';
 
 class NewsPost extends StatefulWidget {
+  final String title;
   final String message;
   final String userEmail; // Updated from 'user' to 'userEmail'
   final String time;
@@ -12,11 +13,13 @@ class NewsPost extends StatefulWidget {
 
   const NewsPost({
     super.key,
+    required this.title,
     required this.message,
     required this.userEmail, // Updated from this.user
     required this.time,
     required this.postId,
     required this.likes,
+    //This .title
     //has viewed-- when user clicks on read me button and opens it
   });
 
@@ -83,6 +86,9 @@ class _NewsPostState extends State<NewsPost> {
 
           return Container(
             decoration: BoxDecoration(
+              //if the article has been read-- make it white
+              //if the article is written by the user-- make it white with purple outline
+              //if the article hasn't been read yet, make it green
               color: Colors.white,
               borderRadius: BorderRadius.circular(8),
             ),
@@ -92,8 +98,16 @@ class _NewsPostState extends State<NewsPost> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 // Text(widget.user, style: TextStyle(color: Colors.grey[500])),
-                Text(username, style: TextStyle(color: Colors.grey[500])),
+                Text(username,
+                    style: TextStyle(
+                        color: Colors.grey[500], fontStyle: FontStyle.italic)),
                 const SizedBox(height: 10),
+                Text(
+                  widget.title,
+                  maxLines: null, // Allows the text to wrap
+                  overflow: TextOverflow.visible,
+                ),
+
                 Text(
                   widget.message,
                   maxLines: null, // Allows the text to wrap

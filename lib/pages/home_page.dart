@@ -5,7 +5,7 @@ import '../components/login_field.dart';
 import '../components/news_post.dart';
 import '../components/drawer.dart';
 import 'profile_page.dart';
-import 'write_article_page.dart'
+import 'write_article_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,11 +40,11 @@ class _HomePageState extends State<HomePage> {
   void onWriteArticleTap() {
     //pop menu drawer
     Navigator.pop(context);
-    //go to profile page
+    //go to write article page
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (context) => const ProfilePage(),
+        builder: (context) => WriteArticlePage(),
       ),
     );
   }
@@ -103,6 +103,7 @@ class _HomePageState extends State<HomePage> {
                         final post = snapshot.data!.docs[index];
                         final timestamp = post['TimeStamp'] as Timestamp;
                         return NewsPost(
+                          title: post['Title'],
                           message: post['Message'],
                           userEmail:
                               post['UserEmail'], //user: post['UserEmail'],

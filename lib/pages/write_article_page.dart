@@ -11,6 +11,23 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
   final currentUser = FirebaseAuth.instance.currentUser!;
   final titleController = TextEditingController();
   final textController = TextEditingController();
+  String username = '';
+
+  @override
+  void initState() {
+    super.initState();
+    fetchUsername();
+  }
+
+  void fetchUsername() async {
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection('Users')
+        .doc(currentUser.email) // Assuming email is used as the document ID
+        .get();
+    setState(() {
+      username = userDoc['username'];
+    });
+  }
 
   void postArticle() {
     if (titleController.text.length >= 7 &&
@@ -18,10 +35,12 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
         textController.text.isNotEmpty) {
       FirebaseFirestore.instance.collection("User Posts").add({
         'UserEmail': currentUser.email,
+        'UserName': username, // Include the username in the post
         'Title': titleController.text,
         'Message': textController.text,
         'TimeStamp': Timestamp.now(),
         'Likes': [],
+        //   'Views': [],
       });
       Navigator.pop(context); // Go back to the previous page after posting
     }
@@ -53,7 +72,8 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
               maxLength: 100,
             ),
             const SizedBox(height: 8),
-            Text("By ${currentUser.email}"),
+            //Text("By ${currentUser.email}"),
+            Text("By $username"),
             const SizedBox(height: 16),
             Expanded(
               child: TextField(
@@ -61,6 +81,7 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
                 decoration: InputDecoration(
                   hintText: 'Write your article here...',
                   border: OutlineInputBorder(),
+                  alignLabelWithHint: true, // Align hint with the top-left
                 ),
                 maxLines: null,
                 expands: true,
