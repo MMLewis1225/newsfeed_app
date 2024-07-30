@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 class MyLoginField extends StatelessWidget {
-  // ignore: prefer_typing_uninitialized_variables
   final TextEditingController controller;
   final String hintText;
   final bool obscureText;
@@ -13,7 +12,6 @@ class MyLoginField extends StatelessWidget {
     required this.obscureText,
   });
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -23,10 +21,16 @@ class MyLoginField extends StatelessWidget {
         obscureText: obscureText,
         decoration: InputDecoration(
           enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.grey),
+            borderSide: BorderSide(
+              color: Colors.black,
+              width: 2.0, // Set the border thickness here
+            ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: Colors.black),
+            borderSide: BorderSide(
+              color: Colors.black,
+              width: 2.0, // Set the border thickness here
+            ),
           ),
           fillColor: Color.fromARGB(255, 251, 251, 251),
           filled: true,

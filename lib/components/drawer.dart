@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import '/components/list_tile.dart';
 
 class MyDrawer extends StatelessWidget {
-  // final void Function()? onTap;
   final void Function()? onProfileTap;
   final void Function()? onSignOut;
   final void Function()? onWriteArticleTap;
+
   const MyDrawer({
     super.key,
     required this.onProfileTap,
@@ -16,51 +16,55 @@ class MyDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Drawer(
-        backgroundColor: Colors.grey[900],
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Column(
-              children: [
-                //header
-                const DrawerHeader(
-                  child: Icon(
-                    Icons.person,
-                    color: Colors.white,
-                    size: 64,
-                  ),
+      backgroundColor: Colors.grey[900],
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Column(
+            children: [
+              // Header
+              const DrawerHeader(
+                child: Icon(
+                  Icons.person,
+                  color: Colors.white,
+                  size: 64,
                 ),
-                //home list
-                MyListTile(
-                  icon: Icons.home,
-                  text: "H O M E",
-                  onTap: () => Navigator.pop(context),
-                ),
-
-                //user profile
-                MyListTile(
-                  icon: Icons.person,
-                  text: "P R O F I L E",
-                  onTap: onProfileTap,
-                ),
-
-                //write article
-                MyListTile(
-                  icon: Icons.person,
-                  text: "write article",
-                  onTap: onWriteArticleTap,
-                ),
-              ],
+              ),
+              // Home list
+              MyListTile(
+                icon: Icons.home,
+                text: "H O M E",
+                onTap: () => Navigator.pop(context),
+              ),
+              // User profile
+              MyListTile(
+                icon: Icons.person,
+                text: "P R O F I L E",
+                onTap: onProfileTap,
+              ),
+              // Write article
+              MyListTile(
+                icon: Icons.post_add,
+                text: "P O S T   A R T I C L E",
+                onTap: onWriteArticleTap,
+              ),
+            ],
+          ),
+          // Logout
+          Padding(
+            padding: const EdgeInsets.only(bottom: 25.0),
+            child: MyListTile(
+              icon: Icons.logout,
+              text: "L O G O U T",
+              onTap: () {
+                if (onSignOut != null) {
+                  onSignOut!(); // Call the sign out function
+                }
+              },
             ),
-            //logout
-            Padding(
-              padding: const EdgeInsets.only(bottom: 25.0),
-              child: MyListTile(
-                  icon: Icons.logout,
-                  text: "L O G O U T",
-                  onTap: () => onSignOut),
-            ),
-          ],
-        ));
+          ),
+        ],
+      ),
+    );
   }
 }

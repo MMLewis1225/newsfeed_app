@@ -47,11 +47,9 @@ class _LoginPageState extends State<LoginPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
-          //    backgroundColor: Colors.deepPurple,
           title: Center(
               child: Text(
             message,
-            //     style: const TextStyle(color: Colors.white),
           )),
         );
       },
@@ -61,138 +59,124 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      //  backgroundColor: Color(0xfff5f0f6),
-      backgroundColor: Colors.grey[300],
+      backgroundColor: const Color(0xff6665DD), // Updated background color
       body: SafeArea(
         child: SingleChildScrollView(
           child: Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.start, // Align to the left
               children: [
-                const SizedBox(height: 50), //used to space things out
+                const SizedBox(height: 70), // Space at the top
 
-                //logo
-                /*
-                const Icon(
-                  Icons.newspaper,
-                  size: 100,
-                ), */
-
-                const Text(
-                  'NewsFeed',
-                  style: TextStyle(
-                    // color: Colors.white,
-                    fontWeight: FontWeight.bold,
-                    fontSize: 30,
+                // Logo
+                const Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 50.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // "Welcome to" text
+                      Text(
+                        'Welcome back!',
+                        style: TextStyle(
+                          fontSize: 36,
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      SizedBox(height: 4), // Space between lines
+                      // "NewsFeed" text with 3D effect
+                      Stack(
+                        alignment: Alignment.centerLeft,
+                        children: [
+                          Positioned(
+                            left: 2,
+                            top: 2,
+                            child: Text(
+                              'NewsFeed',
+                              style: TextStyle(
+                                fontSize: 36,
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                          Text(
+                            'NewsFeed',
+                            style: TextStyle(
+                              fontSize: 36,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ],
                   ),
                 ),
+
                 const SizedBox(height: 50),
 
-                //welcome phrase
-                const Text(
-                  'Welcome back',
-                  style: TextStyle(
-                    color: Colors.grey,
-                    fontSize: 20.0,
+                const SizedBox(height: 25),
+
+                // Username field
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: MyLoginField(
+                    controller: emailController,
+                    hintText: 'Email',
+                    obscureText: false,
+                  ),
+                ),
+
+                const SizedBox(height: 10),
+
+                // Password field
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: MyLoginField(
+                    controller: passwordController,
+                    hintText: 'Password',
+                    obscureText: true,
                   ),
                 ),
 
                 const SizedBox(height: 25),
 
-                //username field
-                MyLoginField(
-                  controller: emailController,
-                  hintText: 'Email',
-                  obscureText: false,
-                ),
-
-                const SizedBox(height: 10),
-                //password field
-                MyLoginField(
-                  controller: passwordController,
-                  hintText: 'Password',
-                  obscureText: true,
-                ),
-
-                const SizedBox(height: 10),
-                //Forgot password
+                // Sign in button
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.end,
-                    children: [
-                      Text('Forgot Password?',
-                          style: TextStyle(color: Colors.grey[600])),
-                    ],
+                  child: LoginButton(
+                    text: "Sign In",
+                    onTap: signUserIn,
                   ),
-                ),
-
-                const SizedBox(height: 25),
-
-                //sign in button
-                LoginButton(
-                  text: "Sign In",
-                  onTap: signUserIn,
-                ),
-
-                const SizedBox(height: 30),
-
-                //continue with
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                  child: Row(
-                    children: [
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 10.0),
-                        child: Text('Or continue with ',
-                            style: TextStyle(color: Colors.grey[700])),
-                      ),
-                      Expanded(
-                        child: Divider(
-                          thickness: 0.5,
-                          color: Colors.grey[400],
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-
-                const SizedBox(height: 30),
-
-                //google sign in
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    SquareTile(imagePath: 'lib/images/google-color-icon.png'),
-                  ],
                 ),
 
                 const SizedBox(height: 20),
 
-                //create account link
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      "Don't have an account? ",
-                      style: TextStyle(color: Colors.grey[700]),
-                    ),
-                    const SizedBox(width: 4),
-                    GestureDetector(
-                      onTap: widget.onTap,
-                      child: const Text(
-                        "Create one now",
-                        style: TextStyle(
-                            color: Colors.blue, fontWeight: FontWeight.bold),
+                // Create account link
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Text(
+                        "Don't have an account? ",
+                        style: TextStyle(color: Colors.black),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 4),
+                      GestureDetector(
+                        onTap: widget.onTap,
+                        child: const Text(
+                          "Create one now",
+                          style: TextStyle(
+                              color: Color(0xFFB2FF9E),
+                              //B2FF9E
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ],
             ),

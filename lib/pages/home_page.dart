@@ -25,9 +25,7 @@ class _HomePageState extends State<HomePage> {
 
   // Go to profile page
   void goToProfilePage() {
-    // Pop menu drawer
     Navigator.pop(context);
-    // Go to profile page
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -38,9 +36,7 @@ class _HomePageState extends State<HomePage> {
 
   // Go to write article page
   void onWriteArticleTap() {
-    // Pop menu drawer
     Navigator.pop(context);
-    // Go to write article page
     Navigator.push(
       context,
       MaterialPageRoute(
@@ -71,64 +67,88 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        title: Text("NewsFeed"),
         backgroundColor: Colors.blue,
-        actions: [
-          IconButton(
-            onPressed: signUserOut,
-            icon: Icon(Icons.logout),
-          ),
-        ],
+        title: Stack(
+          alignment: Alignment.center,
+          children: [
+            // White text
+            Positioned(
+              bottom: 1.5,
+              left: 0.5,
+              child: Text(
+                "NewsFeed",
+                style: TextStyle(
+                  fontSize: 28,
+                  color: Colors.white,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            // Black text
+            Text(
+              "NewsFeed",
+              style: TextStyle(
+                fontSize: 28,
+                color: Colors.black,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
+        ),
       ),
       drawer: MyDrawer(
         onProfileTap: goToProfilePage,
         onSignOut: signUserOut,
         onWriteArticleTap: onWriteArticleTap,
       ),
-      body: Center(
+      body: SingleChildScrollView(
         child: Column(
           children: [
-            // Articles
-            Text("Logged in as ${currentUser.email}"),
-            Expanded(
-              child: StreamBuilder(
-                stream: FirebaseFirestore.instance
-                    .collection("User Posts")
-                    .orderBy("TimeStamp", descending: true) // New posts first
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        final post = snapshot.data!.docs[index];
-                        final timestamp = post['TimeStamp'] as Timestamp;
-                        return NewsPost(
-                          title: post['Title'],
-                          message: post['Message'],
-                          userEmail: post['UserEmail'],
-                          time: formatTimestamp(timestamp),
-                          postId: post.id,
-                          likes: List<String>.from(post['Likes'] ?? []),
-                          category:
-                              post['Category'] ?? 'N/A', // Display the category
-                        );
-                      },
-                    );
-                  } else if (snapshot.hasError) {
-                    return Center(
-                      child: Text("Error: ${snapshot.error}"),
-                    );
-                  }
-                  return const Center(
-                    child: CircularProgressIndicator(),
+            // StreamBuilder to display posts
+            StreamBuilder(
+              stream: FirebaseFirestore.instance
+                  .collection("User Posts")
+                  .orderBy("TimeStamp", descending: true) // New posts first
+                  .snapshots(),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return Column(
+                    children: snapshot.data!.docs.map((post) {
+                      final timestamp = post['TimeStamp'] as Timestamp;
+                      return NewsPost(
+                        title: post['Title'],
+                        message: post['Message'],
+                        userEmail: post['UserEmail'],
+                        time: formatTimestamp(timestamp),
+                        postId: post.id,
+                        likes: List<String>.from(post['Likes'] ?? []),
+                        category: post['Category'] ?? 'N/A',
+                      );
+                    }).toList(),
                   );
-                },
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text("Error: ${snapshot.error}"),
+                  );
+                }
+                return const Center(
+                  child: CircularProgressIndicator(),
+                );
+              },
+            ),
+            // "Logged in as" text at the bottom
+            Container(
+              color: Colors.grey[300],
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Center(
+                child: Text(
+                  "Logged in as ${currentUser.email}",
+                  style: TextStyle(
+                    color: Colors.black,
+                  ),
+                ),
               ),
             ),
-
-            // Text("Logged in as ${currentUser.email}"),
-            //const SizedBox(height: 50),
           ],
         ),
       ),
