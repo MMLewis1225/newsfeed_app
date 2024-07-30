@@ -28,7 +28,6 @@ NewsFeed is a mobile application built with Google Flutter, designed to display 
 ### 4. Add New Post
 - **Create Post:** Users can create a new post by adding a title, text content, and selecting a category.
 - **Post Visibility:** Newly created posts appear at the top of the newsfeed.
-- **User Authentication:** Users must be authenticated to add posts.
 
 ### 5. Like Post
 - **Like/Unlike Posts:** Users can like or unlike posts by tapping the like button.
@@ -92,5 +91,3 @@ flutter run
 This project is licensed under the MIT License
 
 ---
-
-Feel free to adjust any sections or details as needed!
