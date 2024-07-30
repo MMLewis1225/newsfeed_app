@@ -5,18 +5,20 @@ class MyDrawer extends StatelessWidget {
   final void Function()? onProfileTap;
   final void Function()? onSignOut;
   final void Function()? onWriteArticleTap;
+  final String currentUserEmail;
 
   const MyDrawer({
     super.key,
     required this.onProfileTap,
     required this.onSignOut,
     required this.onWriteArticleTap,
+    required this.currentUserEmail,
   });
 
   @override
   Widget build(BuildContext context) {
     return Drawer(
-      backgroundColor: Colors.grey[900],
+      backgroundColor: const Color(0xff6665DD),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
@@ -28,6 +30,18 @@ class MyDrawer extends StatelessWidget {
                   Icons.person,
                   color: Colors.white,
                   size: 64,
+                ),
+              ),
+              Container(
+                color: Colors.grey[300],
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                child: Center(
+                  child: Text(
+                    "Logged in as $currentUserEmail",
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
                 ),
               ),
               // Home list

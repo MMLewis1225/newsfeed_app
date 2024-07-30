@@ -51,8 +51,8 @@ class _HomePageState extends State<HomePage> {
         'Message': textController.text,
         'TimeStamp': Timestamp.now(),
         'Likes': [],
-        'Title': 'Untitled', // Add a default title
-        'Category': 'Uncategorized', // Add a default category
+        'Title': 'Untitled',
+        'Category': 'Uncategorized',
       });
       textController.clear();
     }
@@ -68,8 +68,8 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        backgroundColor: Color(0xFF00B0BB),
-        title: Stack(
+        backgroundColor: const Color(0xFF00B0BB),
+        title: const Stack(
           alignment: Alignment.center,
           children: [
             // White text
@@ -101,6 +101,7 @@ class _HomePageState extends State<HomePage> {
         onProfileTap: goToProfilePage,
         onSignOut: signUserOut,
         onWriteArticleTap: onWriteArticleTap,
+        currentUserEmail: currentUser.email ?? '',
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -144,7 +145,7 @@ class _HomePageState extends State<HomePage> {
               child: Center(
                 child: Text(
                   "Logged in as ${currentUser.email}",
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                   ),
                 ),
@@ -162,8 +163,8 @@ class _HomePageState extends State<HomePage> {
             ),
           );
         },
-        child: Icon(Icons.add),
-        backgroundColor: Color(0xFF00B0BB), // Match the AppBar color
+        child: const Icon(Icons.add),
+        backgroundColor: const Color(0xFF00B0BB), // Match the AppBar color
       ),
     );
   }

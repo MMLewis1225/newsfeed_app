@@ -144,10 +144,10 @@ class _ProfilePageState extends State<ProfilePage> {
                           return Column(
                             children: posts.map((post) {
                               final title = post['Title'];
-                              final time = (post['TimeStamp'] as Timestamp)
-                                  .toDate()
-                                  .toLocal()
-                                  .toString();
+                              final time =
+                                  (post['TimeStamp'] as Timestamp).toDate();
+                              final formattedTime =
+                                  "${time.month}/${time.day}/${time.year}, ${time.hour}:${time.minute}";
 
                               return Card(
                                 margin: const EdgeInsets.symmetric(
@@ -155,7 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 elevation: 5,
                                 child: ListTile(
                                   title: Text(title),
-                                  subtitle: Text(time),
+                                  subtitle: Text(formattedTime),
                                   onTap: () {
                                     Navigator.push(
                                       context,

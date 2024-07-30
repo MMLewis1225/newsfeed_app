@@ -7,21 +7,21 @@ import '../pages/detailed_post_page.dart';
 class NewsPost extends StatefulWidget {
   final String title;
   final String message;
-  final String userEmail; // Updated from 'user' to 'userEmail'
+  final String userEmail;
   final String time;
   final String postId;
-  final List<String> likes; // Contains list of all users that liked it
+  final List<String> likes;
   final String category;
 
   const NewsPost({
     super.key,
     required this.title,
     required this.message,
-    required this.userEmail, // Updated from this.user
+    required this.userEmail,
     required this.time,
     required this.postId,
     required this.likes,
-    required this.category, // Add this line
+    required this.category,
   });
 
   @override
@@ -31,25 +31,11 @@ class NewsPost extends StatefulWidget {
 class _NewsPostState extends State<NewsPost> {
   final currentUser = FirebaseAuth.instance.currentUser!;
   bool isLiked = false;
-  String username = '';
-  String bio = '';
 
   @override
   void initState() {
     super.initState();
     isLiked = widget.likes.contains(currentUser.email);
-    fetchUserData();
-  }
-
-  void fetchUserData() async {
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection('Users')
-        .doc(widget.userEmail)
-        .get();
-    setState(() {
-      username = userDoc['username'];
-      bio = userDoc['bio'];
-    });
   }
 
   void toggleLike() {
@@ -95,67 +81,106 @@ class _NewsPostState extends State<NewsPost> {
 
             return Container(
               decoration: BoxDecoration(
-                color: Color(0xFFB2FF9E),
-                borderRadius: BorderRadius.circular(2),
+                color: Color.fromARGB(255, 255, 255, 255),
+                borderRadius: BorderRadius.circular(8),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 4,
+                    offset: Offset(0, 2),
+                  ),
+                ],
               ),
-              padding: EdgeInsets.only(top: 10, left: 0, right: 25),
-              margin: EdgeInsets.all(25),
-              child: Stack(
+              padding: EdgeInsets.all(16),
+              margin: EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                  Row(
                     children: [
-                      Text(username,
-                          style: TextStyle(
-                              //  color: Colors.[500],
-                              fontStyle: FontStyle.italic)),
-                      const SizedBox(height: 10),
-                      Text(
-                        widget.title,
-                        style: TextStyle(
-                          fontSize: 20, // Increased font size
-                          fontWeight: FontWeight.bold, // Bold text
-                        ),
+                      CircleAvatar(
+                        child: Icon(Icons.person),
+                        radius: 20,
                       ),
-
-                      Divider(),
-                      //   const SizedBox(height: 10),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      SizedBox(width: 8),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(widget.time),
-                          Row(
-                            children: [
-                              LikeButton(isLiked: isLiked, onTap: toggleLike),
-                              const SizedBox(width: 5),
-                              Text(widget.likes.length.toString(),
-                                  style: const TextStyle(
-                                    fontSize: 20,
-                                  )),
-                            ],
+                          Text(
+                            username,
+                            style: TextStyle(
+                              fontWeight: FontWeight.bold,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Text(
+                            bio,
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 12,
+                            ),
                           ),
                         ],
                       ),
                     ],
                   ),
-                  Positioned(
-                    top: 10,
-                    right: 10,
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                      decoration: BoxDecoration(
-                        color: Color(0xFF00B0BB), // Category box color
-                        //borderRadius: BorderRadius.circular(4),
+                  SizedBox(height: 10),
+                  Text(
+                    widget.title,
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  SizedBox(height: 5),
+                  Text(
+                    widget.time,
+                    style: TextStyle(
+                      color: Colors.grey[600],
+                      fontSize: 12,
+                    ),
+                  ),
+                  Divider(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Container(
+                        padding:
+                            EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                        decoration: BoxDecoration(
+                          color: Color(0xFFB2FF9E),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                        child: Text(
+                          widget.category,
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontStyle: FontStyle.italic,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
                       ),
-                      child: Text(
+                      /*           Text(
                         widget.category,
                         style: TextStyle(
                           fontStyle: FontStyle.italic,
                           fontWeight: FontWeight.bold,
-                          //     color: Colors.white,
+                          color: Color(0xFF00B0BB),
                         ),
+                      ), */
+                      Row(
+                        children: [
+                          LikeButton(isLiked: isLiked, onTap: toggleLike),
+                          SizedBox(width: 5),
+                          Text(
+                            widget.likes.length.toString(),
+                            style: TextStyle(
+                              fontSize: 16,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
+                    ],
                   ),
                 ],
               ),
