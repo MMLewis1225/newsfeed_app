@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import '../components/login_field.dart';
 import '../components/news_post.dart';
 import '../components/drawer.dart';
 import 'profile_page.dart';
@@ -52,6 +51,8 @@ class _HomePageState extends State<HomePage> {
         'Message': textController.text,
         'TimeStamp': Timestamp.now(),
         'Likes': [],
+        'Title': 'Untitled', // Add a default title
+        'Category': 'Uncategorized', // Add a default category
       });
       textController.clear();
     }
@@ -67,7 +68,7 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Color(0xFF00B0BB),
         title: Stack(
           alignment: Alignment.center,
           children: [
@@ -116,9 +117,9 @@ class _HomePageState extends State<HomePage> {
                     children: snapshot.data!.docs.map((post) {
                       final timestamp = post['TimeStamp'] as Timestamp;
                       return NewsPost(
-                        title: post['Title'],
-                        message: post['Message'],
-                        userEmail: post['UserEmail'],
+                        title: post['Title'] ?? 'Untitled',
+                        message: post['Message'] ?? '',
+                        userEmail: post['UserEmail'] ?? '',
                         time: formatTimestamp(timestamp),
                         postId: post.id,
                         likes: List<String>.from(post['Likes'] ?? []),
@@ -154,9 +155,15 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          Navigator.pushNamed(context, '/writeArticle');
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => WriteArticlePage(),
+            ),
+          );
         },
         child: Icon(Icons.add),
+        backgroundColor: Color(0xFF00B0BB), // Match the AppBar color
       ),
     );
   }
