@@ -160,14 +160,6 @@ class _NewsPostState extends State<NewsPost> {
                           ),
                         ),
                       ),
-                      /*           Text(
-                        widget.category,
-                        style: TextStyle(
-                          fontStyle: FontStyle.italic,
-                          fontWeight: FontWeight.bold,
-                          color: Color(0xFF00B0BB),
-                        ),
-                      ), */
                       Row(
                         children: [
                           LikeButton(isLiked: isLiked, onTap: toggleLike),

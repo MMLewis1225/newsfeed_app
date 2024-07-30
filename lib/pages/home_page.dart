@@ -69,14 +69,14 @@ class _HomePageState extends State<HomePage> {
       backgroundColor: Colors.grey[300],
       appBar: AppBar(
         backgroundColor: const Color(0xFF00B0BB),
-        title: const Stack(
+        title: Stack(
           alignment: Alignment.center,
           children: [
             // White text
             Positioned(
               bottom: 1.5,
               left: 0.5,
-              child: Text(
+              child: const Text(
                 "NewsFeed",
                 style: TextStyle(
                   fontSize: 28,
@@ -86,7 +86,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
             // Black text
-            Text(
+            const Text(
               "NewsFeed",
               style: TextStyle(
                 fontSize: 28,

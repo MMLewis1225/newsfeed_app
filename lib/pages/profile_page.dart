@@ -104,13 +104,27 @@ class _ProfilePageState extends State<ProfilePage> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Icon(
-                      Icons.person,
-                      size: 72,
+                    // Centered profile icon
+
+                    Center(
+                      child: CircleAvatar(
+                        radius: 72,
+                        //  backgroundColor: Colors.grey[300],
+                        child: Icon(
+                          Icons.person,
+                          size: 72,
+                          color: Colors.black,
+                        ),
+                      ),
                     ),
-                    Text(currentUser.email!,
+                    const SizedBox(height: 16),
+                    Center(
+                      child: Text(
+                        currentUser.email!,
                         textAlign: TextAlign.center,
-                        style: TextStyle(color: Colors.grey[700])),
+                        style: TextStyle(color: Colors.grey[700]),
+                      ),
+                    ),
                     const SizedBox(height: 20),
                     Text(
                       'My Details',

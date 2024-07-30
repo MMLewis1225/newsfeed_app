@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import '../components/category_button.dart'; // Import the category button component
+import '../components/title_design.dart'; // Import the TitleDesign component
 
 class WriteArticlePage extends StatefulWidget {
   @override
@@ -159,14 +160,15 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Write Article"),
-        backgroundColor: Colors.blue,
+        title: const TitleDesign(text: "Write Article"),
+        backgroundColor: const Color(0xFF00B0BB),
         actions: [
           ElevatedButton(
             onPressed: handleContinueButton,
             style: ElevatedButton.styleFrom(
-              foregroundColor: Colors.black,
-              backgroundColor: Colors.blue,
+              foregroundColor: const Color(0xFF00B0BB),
+              backgroundColor: const Color.fromRGBO(0, 0, 0, 1),
+              // backgroundColor: const Color(0xFF00B0BB),
               side: BorderSide(color: Colors.black), // Black outline
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8), // Smaller border radius
@@ -187,10 +189,10 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
               decoration: InputDecoration(
                 labelText: 'Title',
                 focusedBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue, width: 2),
+                  borderSide: BorderSide(color: Color(0xFFB2FF9E), width: 2),
                 ),
                 enabledBorder: UnderlineInputBorder(
-                  borderSide: BorderSide(color: Colors.blue, width: 1),
+                  borderSide: BorderSide(color: Color(0xFFB2FF9E), width: 1),
                 ),
               ),
               maxLength: 100,
@@ -200,13 +202,13 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            const SizedBox(height: 16),
+            //  const SizedBox(height: 16),
             Text(
               "By $username",
               style: const TextStyle(
                 fontStyle: FontStyle.italic,
                 fontSize: 14,
-                color: Colors.grey,
+                color: Colors.black,
               ),
             ),
             const SizedBox(height: 16),

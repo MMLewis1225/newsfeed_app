@@ -33,33 +33,38 @@ class MyDrawer extends StatelessWidget {
                 ),
               ),
               Container(
-                color: Colors.grey[300],
-                padding: const EdgeInsets.symmetric(vertical: 10),
-                child: Center(
-                  child: Text(
-                    "Logged in as $currentUserEmail",
-                    style: const TextStyle(
-                      color: Colors.black,
-                    ),
+                // color: Colors.grey[300],
+                padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                decoration: BoxDecoration(
+                  color: Color(0xFFB2FF9E),
+                  borderRadius: BorderRadius.circular(2),
+                ),
+                child: Text(
+                  "Logged in as $currentUserEmail",
+                  style: const TextStyle(
+                    color: Colors.black,
+                    //   fontStyle: FontStyle.italic,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
+
               // Home list
               MyListTile(
                 icon: Icons.home,
-                text: "H O M E",
+                text: "Home",
                 onTap: () => Navigator.pop(context),
               ),
               // User profile
               MyListTile(
                 icon: Icons.person,
-                text: "P R O F I L E",
+                text: "Profile",
                 onTap: onProfileTap,
               ),
               // Write article
               MyListTile(
                 icon: Icons.post_add,
-                text: "P O S T   A R T I C L E",
+                text: "Post Article",
                 onTap: onWriteArticleTap,
               ),
             ],
@@ -69,7 +74,7 @@ class MyDrawer extends StatelessWidget {
             padding: const EdgeInsets.only(bottom: 25.0),
             child: MyListTile(
               icon: Icons.logout,
-              text: "L O G O U T",
+              text: "Log Out",
               onTap: () {
                 if (onSignOut != null) {
                   onSignOut!(); // Call the sign out function
