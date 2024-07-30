@@ -89,6 +89,7 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           children: [
             // Articles
+            Text("Logged in as ${currentUser.email}"),
             Expanded(
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
@@ -126,30 +127,8 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
 
-            // Post an article
-            Padding(
-              padding: const EdgeInsets.all(25.0),
-              child: Row(
-                children: [
-                  Expanded(
-                    child: MyLoginField(
-                      controller: textController,
-                      hintText: "Write your article here...",
-                      obscureText: false,
-                    ),
-                  ),
-
-                  // Post button
-                  IconButton(
-                    onPressed: postMessage,
-                    icon: const Icon(Icons.arrow_circle_up),
-                  ),
-                ],
-              ),
-            ),
-
-            Text("Logged in as ${currentUser.email}"),
-            const SizedBox(height: 50),
+            // Text("Logged in as ${currentUser.email}"),
+            //const SizedBox(height: 50),
           ],
         ),
       ),

@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import '../components/like_button.dart';
+import '../pages/detailed_post_page.dart';
 
 class NewsPost extends StatefulWidget {
   final String title;
@@ -30,25 +31,24 @@ class NewsPost extends StatefulWidget {
 class _NewsPostState extends State<NewsPost> {
   final currentUser = FirebaseAuth.instance.currentUser!;
   bool isLiked = false;
-  String username = ''; // For storing the fetched username
-  String bio = ''; // For storing the fetched bio
+  String username = '';
+  String bio = '';
 
   @override
   void initState() {
     super.initState();
     isLiked = widget.likes.contains(currentUser.email);
-    fetchUserData(); // Fetch the user data when the widget initializes
+    fetchUserData();
   }
 
   void fetchUserData() async {
-    // Fetch user data from Firestore
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
         .collection('Users')
         .doc(widget.userEmail)
         .get();
     setState(() {
       username = userDoc['username'];
-      bio = userDoc['bio']; // Get the bio from the document
+      bio = userDoc['bio'];
     });
   }
 
@@ -57,17 +57,14 @@ class _NewsPostState extends State<NewsPost> {
       isLiked = !isLiked;
     });
 
-    // Access the document in Firebase
     DocumentReference postRef =
         FirebaseFirestore.instance.collection('User Posts').doc(widget.postId);
 
     if (isLiked) {
-      // If post is liked, add the user's email to the likes list
       postRef.update({
         'Likes': FieldValue.arrayUnion([currentUser.email])
       });
     } else {
-      // If post is unliked, remove the user from likes list
       postRef.update({
         'Likes': FieldValue.arrayRemove([currentUser.email])
       });
@@ -76,76 +73,87 @@ class _NewsPostState extends State<NewsPost> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<DocumentSnapshot>(
-      stream: FirebaseFirestore.instance
-          .collection('Users')
-          .doc(widget.userEmail)
-          .snapshots(),
-      builder: (context, snapshot) {
-        if (snapshot.hasData) {
-          final userDoc = snapshot.data!;
-          final username = userDoc['username'];
-          final bio = userDoc['bio'];
-
-          return Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            margin: EdgeInsets.only(top: 25, left: 25, right: 25),
-            padding: EdgeInsets.all(25),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(username,
-                    style: TextStyle(
-                        color: Colors.grey[500], fontStyle: FontStyle.italic)),
-                const SizedBox(height: 10),
-                Text(
-                  widget.title,
-                  maxLines: null,
-                  overflow: TextOverflow.visible,
-                ),
-                Text(
-                  widget.message,
-                  maxLines: null,
-                  overflow: TextOverflow.visible,
-                ),
-                Text(
-                  "Category: ${widget.category}", // Display the category
-                  style: TextStyle(
-                      color: Colors.grey[600], fontStyle: FontStyle.italic),
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(widget.time),
-                    Row(
-                      children: [
-                        LikeButton(isLiked: isLiked, onTap: toggleLike),
-                        const SizedBox(width: 5),
-                        Text(widget.likes.length.toString(),
-                            style: const TextStyle(
-                              fontSize: 20,
-                            )),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(width: 5),
-                Text(
-                  "${username}'s bio: $bio",
-                  style: TextStyle(color: Colors.grey[600]),
-                ),
-              ],
-            ),
-          );
-        } else if (snapshot.hasError) {
-          return Text("Error: ${snapshot.error}");
-        }
-        return CircularProgressIndicator();
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PostDetailPage(postId: widget.postId),
+          ),
+        );
       },
+      child: StreamBuilder<DocumentSnapshot>(
+        stream: FirebaseFirestore.instance
+            .collection('Users')
+            .doc(widget.userEmail)
+            .snapshots(),
+        builder: (context, snapshot) {
+          if (snapshot.hasData) {
+            final userDoc = snapshot.data!;
+            final username = userDoc['username'];
+            final bio = userDoc['bio'];
+
+            return Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              margin: EdgeInsets.only(top: 25, left: 25, right: 25),
+              padding: EdgeInsets.all(25),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(username,
+                      style: TextStyle(
+                          color: Colors.grey[500],
+                          fontStyle: FontStyle.italic)),
+                  const SizedBox(height: 10),
+                  Text(
+                    widget.title,
+                    maxLines: null,
+                    overflow: TextOverflow.visible,
+                  ),
+                  Text(
+                    widget.message,
+                    maxLines: null,
+                    overflow: TextOverflow.visible,
+                  ),
+                  Text(
+                    "Category: ${widget.category}",
+                    style: TextStyle(
+                        color: Colors.grey[600], fontStyle: FontStyle.italic),
+                  ),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(widget.time),
+                      Row(
+                        children: [
+                          LikeButton(isLiked: isLiked, onTap: toggleLike),
+                          const SizedBox(width: 5),
+                          Text(widget.likes.length.toString(),
+                              style: const TextStyle(
+                                fontSize: 20,
+                              )),
+                        ],
+                      ),
+                    ],
+                  ),
+                  const SizedBox(width: 5),
+                  Text(
+                    "${username}'s bio: $bio",
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),
+                ],
+              ),
+            );
+          } else if (snapshot.hasError) {
+            return Text("Error: ${snapshot.error}");
+          }
+          return CircularProgressIndicator();
+        },
+      ),
     );
   }
 }
