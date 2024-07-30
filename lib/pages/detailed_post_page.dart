@@ -102,6 +102,10 @@ class _PostDetailPageState extends State<PostDetailPage> {
                     formattedTime,
                     style: TextStyle(color: Colors.grey[500]),
                   ),
+                  /*         Text(
+                    "${username}'s bio: $bio",
+                    style: TextStyle(color: Colors.grey[600]),
+                  ),*/
                   SizedBox(height: 16),
                   Expanded(
                     child: SingleChildScrollView(

@@ -10,7 +10,7 @@ class NewsPost extends StatefulWidget {
   final String userEmail; // Updated from 'user' to 'userEmail'
   final String time;
   final String postId;
-  final List<String> likes; //contains list of all users that liked it
+  final List<String> likes; // Contains list of all users that liked it
   final String category;
 
   const NewsPost({
@@ -95,55 +95,67 @@ class _NewsPostState extends State<NewsPost> {
 
             return Container(
               decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(8),
+                color: Color(0xFFB2FF9E),
+                borderRadius: BorderRadius.circular(2),
               ),
-              margin: EdgeInsets.only(top: 25, left: 25, right: 25),
-              padding: EdgeInsets.all(25),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              padding: EdgeInsets.only(top: 10, left: 0, right: 25),
+              margin: EdgeInsets.all(25),
+              child: Stack(
                 children: [
-                  Text(username,
-                      style: TextStyle(
-                          color: Colors.grey[500],
-                          fontStyle: FontStyle.italic)),
-                  const SizedBox(height: 10),
-                  Text(
-                    widget.title,
-                    maxLines: null,
-                    overflow: TextOverflow.visible,
-                  ),
-                  Text(
-                    widget.message,
-                    maxLines: null,
-                    overflow: TextOverflow.visible,
-                  ),
-                  Text(
-                    "Category: ${widget.category}",
-                    style: TextStyle(
-                        color: Colors.grey[600], fontStyle: FontStyle.italic),
-                  ),
-                  const SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(widget.time),
+                      Text(username,
+                          style: TextStyle(
+                              //  color: Colors.[500],
+                              fontStyle: FontStyle.italic)),
+                      const SizedBox(height: 10),
+                      Text(
+                        widget.title,
+                        style: TextStyle(
+                          fontSize: 20, // Increased font size
+                          fontWeight: FontWeight.bold, // Bold text
+                        ),
+                      ),
+
+                      Divider(),
+                      //   const SizedBox(height: 10),
                       Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          LikeButton(isLiked: isLiked, onTap: toggleLike),
-                          const SizedBox(width: 5),
-                          Text(widget.likes.length.toString(),
-                              style: const TextStyle(
-                                fontSize: 20,
-                              )),
+                          Text(widget.time),
+                          Row(
+                            children: [
+                              LikeButton(isLiked: isLiked, onTap: toggleLike),
+                              const SizedBox(width: 5),
+                              Text(widget.likes.length.toString(),
+                                  style: const TextStyle(
+                                    fontSize: 20,
+                                  )),
+                            ],
+                          ),
                         ],
                       ),
                     ],
                   ),
-                  const SizedBox(width: 5),
-                  Text(
-                    "${username}'s bio: $bio",
-                    style: TextStyle(color: Colors.grey[600]),
+                  Positioned(
+                    top: 10,
+                    right: 10,
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Color(0xFF00B0BB), // Category box color
+                        //borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: Text(
+                        widget.category,
+                        style: TextStyle(
+                          fontStyle: FontStyle.italic,
+                          fontWeight: FontWeight.bold,
+                          //     color: Colors.white,
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),
