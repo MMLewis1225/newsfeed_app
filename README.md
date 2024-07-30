@@ -8,41 +8,40 @@ NewsFeed is a mobile application built with Google Flutter, designed to display 
 ## Features
 
 ### 1. Sign In
-- **User Authentication:** Users can sign in with their email or can create
-  an account by providing an email, password, and username
+- **User Authentication:** Users can sign in with their email or create an account by providing an email, password, and username.
 
-### 1. View Newsfeed
-
+### 2. View Newsfeed
 - **Display a List of Posts:** The newsfeed displays all posts in chronological order.
 - **User’s Name:** Displays the name of the user who posted.
-- **Bio:** Shows a brief bio of the user (if the user has one).
-- **Post Content:** Includes the title, text content, and category of the post.
+- **Bio:** Shows a brief bio of the user.
+- **Post Content:** Includes the title and category of the post.
 - **Timestamp:** Shows when the post was created.
 - **Like Count:** Displays the number of likes each post has received.
 - **Like Button:** Allows users to like or unlike a post.
 
-## 3. Read Article 
---- **Post Content:** Includes the title, text content, and category of the post.
-- **Read post:** Allows users to read a post by clicking an article
+### 3. Read Article
+- **Post Content:** Includes the title, text content, and category of the post.
+- **Read Post:** Allows users to read a post by clicking on an article.
+- **Like Count:** Displays the number of likes each post has received.
+- **Like Button:** Allows users to like or unlike a post.
 
-### 2. Add New Post
+### 4. Add New Post
 - **Create Post:** Users can create a new post by adding a title, text content, and selecting a category.
 - **Post Visibility:** Newly created posts appear at the top of the newsfeed.
 - **User Authentication:** Users must be authenticated to add posts.
 
-### 3. Like Post
+### 5. Like Post
 - **Like/Unlike Posts:** Users can like or unlike posts by tapping the like button.
 - **Update Like Count:** The like count updates in real time as users interact with the posts.
 
-### 4. Persist Data
+### 6. Persist Data
 - **Data Storage:** Uses Firebase Firestore to store posts and like counts.
 - **Data Persistence:** Data remains available even after the app is closed and reopened.
 
-### 4. Manage Profile
-- **Change Username:** Users can edit their username 
-- **Add Bio:** Users can add a bio that will appear on any of their posts 
-- **View Their Posts** Page displays a list of all their posts
-
+### 7. Manage Profile
+- **Change Username:** Users can edit their username.
+- **Add Bio:** Users can add a bio that will appear on any of their posts.
+- **View Their Posts:** A page displays a list of all their posts.
 
 ## Setup and Installation
 
@@ -78,11 +77,11 @@ flutter run
 ```
 
 ## Planned Features
-- Ability to sort by top rated posts and categories
-- Ability to comment on posts
-- Ability to add images to posts
-- Google authentication 
-
+- Ability to sort by top-rated posts and categories.
+- Ability to comment on posts.
+- Ability to add images to posts.
+- Google authentication.
+- Finishing styling
 
 ## Usage
 - **Newsfeed:** View and interact with posts.
@@ -90,6 +89,8 @@ flutter run
 - **Like/Unlike Posts:** Tap the like button on any post to like or unlike it.
 
 ## License
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License
 
 ---
+
+Feel free to adjust any sections or details as needed!

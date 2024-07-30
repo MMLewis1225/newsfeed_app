@@ -186,7 +186,7 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
           children: [
             TextField(
               controller: titleController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: 'Title',
                 focusedBorder: UnderlineInputBorder(
                   borderSide: BorderSide(color: Color(0xFFB2FF9E), width: 2),
@@ -197,7 +197,7 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
               ),
               maxLength: 100,
               maxLines: null,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
@@ -207,8 +207,8 @@ class _WriteArticlePageState extends State<WriteArticlePage> {
               "By $username",
               style: const TextStyle(
                 fontStyle: FontStyle.italic,
-                fontSize: 14,
-                color: Colors.black,
+                fontSize: 16,
+                color: Colors.grey,
               ),
             ),
             const SizedBox(height: 16),
